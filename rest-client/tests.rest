@@ -1,0 +1,41 @@
+#SIGN UP
+GET http://localhost:2000/login
+content-type: application/json
+username: admin
+password: salasana
+
+###
+#sendfile testing
+GET http://localhost:2000/bigplaylist/00aashorttest.mp3
+
+###
+#token in URL test
+GET http://localhost:2000/bigplaylist/00aashorttest.mp3?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2MzQ4OTE0NTMsImV4cCI6MTYzNDk1MTQ1M30.ekQec4DO-2PorwT-yXBJYU_r3zj4ItL-Z59X3Udgryc
+
+#vanhat alla väärällä portilla
+###
+#SHOW USERS
+GET http://localhost:8080/auth/all
+
+###
+#LOGIN
+POST http://localhost:8080/auth/login
+content-type: application/json
+
+{
+    "username": "test",
+    "password": "salasana123"
+}
+
+###
+#posts show public
+GET  http://localhost:8080/posts/public
+
+###
+#posts show private
+GET  http://localhost:8080/posts/private
+
+###
+#request private posts with token
+GET  http://localhost:8080/posts/private
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2MzQ3NDM2NDgsImV4cCI6MTYzNDgwMzY0OH0.D1YIaUXXjKIvxRa1Grrn8PCbAYDVTFwJcsKZwELaf4M
