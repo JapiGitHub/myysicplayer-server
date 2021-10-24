@@ -110,6 +110,7 @@ app.get("/", checkAuth, (req, res) => {
   );
   const incomingToken = req.header("token");
   console.log("INCOMING TOKEN", incomingToken);
+  //DEBUG check if localStorage myysicplayer-token is valid!
   res.send(folderContent);
 });
 //console.log("TYPE ::: ", typeof users.users[0].username); //string
@@ -130,6 +131,7 @@ app.get("/login", (req, res) => {
       .send(`no user ${attemptingUser} != ${req.headers.username}`);
   } else {
     let token;
+    let ok = false;
     checkPass = async () => {
       if (await bcrypt.compare(req.headers.password, attemptingUser.password)) {
         console.log(req.headers.password, " = ", attemptingUser.password);
@@ -139,13 +141,20 @@ app.get("/login", (req, res) => {
         token = await JWT.sign({ payload }, process.env.JWT_SECRET, {
           expiresIn: 600000,
         });
+        ok = true;
       } else {
         res.status(400).send("not valid");
         console.log("ei valid ", req.headers.password);
       }
     };
+
+    //DEBUG eli tää lähettää tän vaikka ei sais?
     checkPass().then(() => {
-      res.status(200).json(token);
+      if (ok) {
+        res.status(200).json(token);
+      } else {
+        res.status(400).send("nope");
+      }
     });
   }
 });
