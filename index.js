@@ -15,9 +15,10 @@ let users = require("./users-db");
 const url = require("url");
 const checkAuth = require("./middleware/checkAuth");
 
-//youtube downloader
+//youtube / soundcloud downloader
 const ytdl = require("ytdl-core");
-//youtube title to valid filename
+const scdl = require("soundcloud-downloader").default;
+//title to valid filename
 var sanitize = require("sanitize-filename");
 
 //uploadingiin tarvittavat
@@ -102,7 +103,7 @@ app.get(
 //middleware: jos token not-ok, niin send biisilistan sijasta error viesti.
 //jos reactin useEffecti ottaa vastaan biisilistan sijasta errorin, niin
 //login sivu pärähtää esiin
-app.get("/", checkAuth, (req, res) => {
+app.get("/", checkAuth, async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -110,7 +111,9 @@ app.get("/", checkAuth, (req, res) => {
   );
   const incomingToken = req.header("token");
   console.log("INCOMING TOKEN", incomingToken);
-  //DEBUG check if localStorage myysicplayer-token is valid!
+
+  await loadFolder("./bigplaylist");
+  //test
   res.send(folderContent);
 });
 //console.log("TYPE ::: ", typeof users.users[0].username); //string
@@ -161,7 +164,7 @@ app.get("/login", (req, res) => {
 
 //
 //
-//YOUTUBE DOWNLOAD
+//YOUTUBE / SOUNDCLOUD DOWNLOAD
 app.post("/ytdl/", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -169,6 +172,8 @@ app.post("/ytdl/", async (req, res) => {
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   let validTitle;
+
+  //YouTube
   const downloadFromYoutube = async () => {
     const ytInfo = await ytdl.getInfo(req.body.url);
     validTitle = sanitize(ytInfo.videoDetails.title);
@@ -176,13 +181,62 @@ app.post("/ytdl/", async (req, res) => {
     ytdl(req.body.url, {
       filter: "audioonly",
     }).pipe(fs.createWriteStream(`${__dirname}/bigplaylist/${validTitle}.mp3`));
+
     console.log("downloaded mp3 : ", ytInfo.videoDetails.title);
+    res.status(200).send(`${sanitize(ytInfo.videoDetails.title)}.mp3`);
   };
-  await downloadFromYoutube();
 
-  console.log("2 : ", validTitle);
+  //soundcloud
+  const downloadFromSoundCloud = async () => {
+    //SOUNDCLOUD CLIENT ID:n saa näin : chrome dev tools -> Network -> Fetch/XMR -> sieltä löytyy toi headerseisstä
+    //https://api-auth.soundcloud.com/connect/session?client_id=ZyeUddavtQufdSASlMNmlO6oGkXi347q
+    //client_id=ZyeUddavtQufdSASlMNmlO6oGkXi347q
 
-  await res.status(200).send(`${validTitle}.mp3`);
+    //URL toimii myös lisähärpäkkeillä   esim url/biisi??in_system_playlist=personalized-tracks%3A%3Ajanne-kaarle-korkee%3A84915999
+    //toimii jopa vaikka soudncloud biisi ois "donwloadable: false"
+    const SOUNDCLOUD_URL = req.body.url;
+    const CLIENT_ID = "ZyeUddavtQufdSASlMNmlO6oGkXi347q";
+
+    console.log({ SOUNDCLOUD_URL });
+
+    scdl.getInfo(SOUNDCLOUD_URL, CLIENT_ID).then((info) => {
+      console.log(info.title);
+
+      scdl
+        .download(SOUNDCLOUD_URL)
+        .then((stream) => {
+          stream.pipe(
+            fs.createWriteStream(
+              `${__dirname}/bigplaylist/${sanitize(info.title)}.mp3`
+            )
+          );
+        })
+        .then(() => {
+          res.status(200).send(`${sanitize(info.title)}.mp3`);
+        });
+    });
+  };
+
+  //AUTOMATIC CHOOSE YT / SC
+  //tän vois varmaan tehdä fiksumminkin jollain URL-kirjastolla.
+  //nyt joku vois injektoida serverille jotain jos se hämäis tota? esim pewnedlol.com/reverseShell.xyz?fake=youtube.com
+  if (
+    req.body.url.includes("https://youtube.com/") ||
+    req.body.url.includes("https://www.youtube.com/") ||
+    req.body.url.includes("https://youtu.be/")
+  ) {
+    console.log("recognized URL as youtube or youtu.be");
+    await downloadFromYoutube();
+  }
+
+  if (
+    req.body.url.includes("https://soundcloud.com/") ||
+    req.body.url.includes("https://www.soundcloud.com/")
+  ) {
+    console.log("recognized URL as soundcloud");
+    await downloadFromSoundCloud();
+  }
+
   //reactin päässä react lisää vaan songList stateen ton nimen, eli ei tarvi täältä päästä hakea folderContenttia uudestaan latauksen jälkeen.
 });
 

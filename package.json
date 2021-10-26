@@ -23,6 +23,7 @@
     "nodemon": "^2.0.13",
     "npm": "^8.1.0",
     "sanitize-filename": "^1.6.3",
+    "soundcloud-downloader": "^1.0.0",
     "ytdl-core": "^4.9.1"
   }
 }
