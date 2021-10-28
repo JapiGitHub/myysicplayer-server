@@ -40,7 +40,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 const port = 2000;
-const hostname = "localhost";
 
 async function loadFolder(folder) {
   folderContent = await fsasync.readdir(folder);
@@ -145,9 +144,6 @@ app.get("/login", (req, res) => {
           expiresIn: 600000,
         });
         ok = true;
-      } else {
-        res.status(400).send("not valid");
-        console.log("ei valid ", req.headers.password);
       }
     };
 
@@ -275,5 +271,5 @@ app.post("/upload/", upload.single("file"), async (req, res, next) => {
 //
 
 app.listen(port, () => {
-  console.log(`node server listening at http://localhost:${port}`);
+  console.log(`node server listening at http://13.48.136.183:${port}`);
 });
