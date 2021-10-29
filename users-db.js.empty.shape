@@ -1,0 +1,18 @@
+const users = [
+  {
+    username: "insert username here",
+    password: "$2b$10$NW7.....niNJA...",
+    //hahaha louhin itelle hashin mikä sisältää sanan niNJA xD
+  }
+];
+
+module.exports = {
+  users,
+};
+
+//JOS tekisit signupin että olis lisää usereita, ni näin sais uusia hasheja:
+//tässä tilanteessa ei ole tarvetta koska ainoastaan personal use!!
+//let hashedPassword;
+//const asyncHash = async () => {
+//  hashedPassword = await bcrypt.hash("jokuvaikeesalasana", 10);
+//};
