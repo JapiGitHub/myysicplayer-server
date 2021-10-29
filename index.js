@@ -66,7 +66,6 @@ app.get(
   (req, res, next) => {
     //MIDDLEWARE AUTH CHECK
     console.log("-----");
-    console.log("-----");
     console.log("MIDDLEWARE AUTH CHECK");
     console.error(req.query.token);
     let user;
@@ -81,10 +80,7 @@ app.get(
       //response -> token fail -> laita react menemään login "sivulle"
       res.status(403).send("token NOT verified");
     }
-
     console.log("-----");
-    console.log("-----");
-
     next();
   },
   (req, res) => {
@@ -115,13 +111,11 @@ app.get("/", checkAuth, async (req, res) => {
   //test
   res.send(folderContent);
 });
-//console.log("TYPE ::: ", typeof users.users[0].username); //string
 
 //LOGIN
 app.get("/login", (req, res) => {
   console.log("LOGIN ATTEMPT : ");
-  console.log("usr :", req.headers.username);
-  console.log("pass:", req.headers.password);
+  console.log("usr : ", req.headers.username);
 
   const attemptingUser = users.users.find((user) => {
     return user.username === req.headers.username;
@@ -136,9 +130,6 @@ app.get("/login", (req, res) => {
     let ok = false;
     checkPass = async () => {
       if (await bcrypt.compare(req.headers.password, attemptingUser.password)) {
-        console.log(req.headers.password, " = ", attemptingUser.password);
-
-        //lähetä JWT clientille
         const payload = attemptingUser.username;
         token = await JWT.sign({ payload }, process.env.JWT_SECRET, {
           expiresIn: 600000,
