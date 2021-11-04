@@ -10,7 +10,7 @@ GET http://localhost:2000/bigplaylist/00aashorttest.mp3
 
 ###
 #token in URL test
-GET http://localhost:2000/bigplaylist/00aashorttest.mp3?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2MzQ4OTE0NTMsImV4cCI6MTYzNDk1MTQ1M30.ekQec4DO-2PorwT-yXBJYU_r3zj4ItL-Z59X3Udgryc
+GET http://localhost:2000/bigplaylist/00aashorttest.mp3?token=eyJhbGciOiJIUzI1NiWRONG
 
 #vanhat alla väärällä portilla
 ###
