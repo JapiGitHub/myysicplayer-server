@@ -252,7 +252,7 @@ app.post("/api/upload/", upload.single("file"), async (req, res, next) => {
       fs.createWriteStream(`${__dirname}/bigplaylist/${validTitle}`)
     );
 
-    res.send(`file uploaded as ${validTitle}`);
+    res.send(validTitle);
   } else {
     //eli jos joku koittaa lähettää vaarallista tiedostoa joka on vaan muutettu .mp3:ksi, niin ei pääse läpi.
     console.log("wrong fileExtension type : ", fileExt);
