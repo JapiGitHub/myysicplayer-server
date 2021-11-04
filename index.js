@@ -62,7 +62,7 @@ doThe(); */
 
 //PLAY SONG REQUEST
 app.get(
-  "/bigplaylist/:songfile",
+  "/api/bigplaylist/:songfile",
   (req, res, next) => {
     //MIDDLEWARE AUTH CHECK
     console.log("-----");
@@ -98,7 +98,7 @@ app.get(
 //middleware: jos token not-ok, niin send biisilistan sijasta error viesti.
 //jos reactin useEffecti ottaa vastaan biisilistan sijasta errorin, niin
 //login sivu pärähtää esiin
-app.get("/getlist", checkAuth, async (req, res) => {
+app.get("/api/getlist", checkAuth, async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -113,7 +113,7 @@ app.get("/getlist", checkAuth, async (req, res) => {
 });
 
 //LOGIN
-app.get("/login", (req, res) => {
+app.get("/api/login", (req, res) => {
   console.log("LOGIN ATTEMPT : ");
   console.log("usr : ", req.headers.username);
 
@@ -152,7 +152,7 @@ app.get("/login", (req, res) => {
 //
 //
 //YOUTUBE / SOUNDCLOUD DOWNLOAD
-app.post("/ytdl/", async (req, res) => {
+app.post("/api/ytdl/", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -230,7 +230,7 @@ app.post("/ytdl/", async (req, res) => {
 //
 //upload from frontend disk
 const upload = multer();
-app.post("/upload/", upload.single("file"), async (req, res, next) => {
+app.post("/api/upload/", upload.single("file"), async (req, res, next) => {
   //console.log("::BODY::", req.body);
   console.log("::FILE::", req.file);
   const { file } = req;

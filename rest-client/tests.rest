@@ -10,7 +10,7 @@ GET http://localhost:2000/bigplaylist/00aashorttest.mp3
 
 ###
 #token in URL test
-GET http://localhost:2000/bigplaylist/00aashorttest.mp3?token=eyJhbGciOiJIUzI1NiWRONG
+GET http://localhost:2000/bigplaylist/00aashorttest.mp3?token=eyJhbGciiiiWRONG
 
 #vanhat alla väärällä portilla
 ###
@@ -45,4 +45,4 @@ GET  http://13.48.136.183:2000/
 ###
 #request with token
 GET  http://localhost:8080/posts/private
-x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cYzNDgwMzY0OH0.D1YIaUXXjKIvxWRONG
+x-auth-token: eyJhbGiiiiiWRONG
