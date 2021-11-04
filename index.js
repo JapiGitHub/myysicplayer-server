@@ -98,7 +98,7 @@ app.get(
 //middleware: jos token not-ok, niin send biisilistan sijasta error viesti.
 //jos reactin useEffecti ottaa vastaan biisilistan sijasta errorin, niin
 //login sivu pärähtää esiin
-app.get("/", checkAuth, async (req, res) => {
+app.get("/getlist", checkAuth, async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",

@@ -18,21 +18,31 @@ GET http://localhost:2000/bigplaylist/00aashorttest.mp3?token=eyJhbGciOiJIUzI1Ni
 GET http://localhost:8080/auth/all
 
 ###
-#LOGIN
-GET http://13.48.136.183:2000/login
+#LOGIN IP
+GET https://13.48.136.183:443/login
 content-type: application/json
 username: admin
-password: wrong
+password: asdfasdf
 
 ###
-#posts show public
-GET  http://localhost:8080/posts/public
+#get songlist
+GET http://13.48.136.183/getlist
+content-type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2MzU5NDEyNDAsImV4cCI6MTYzNjU0MTI0MH0.RgTZpc_iO8EpoR0nw_DJaPSQejwus0A4WbSNYdWcBFQ
 
 ###
-#posts show private
-GET  http://13.48.136.183:8080/
+#LOGIN domain
+GET http://myysic.xyz:2000/login
+content-type: application/json
+username: admin
+password: sfsdsfd
+
 
 ###
-#request private posts with token
+#show
+GET  http://13.48.136.183:2000/
+
+###
+#request with token
 GET  http://localhost:8080/posts/private
 x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2MzQ3NDM2NDgsImV4cCI6MTYzNDgwMzY0OH0.D1YIaUXXjKIvxWRONG
