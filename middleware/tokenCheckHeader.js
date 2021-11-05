@@ -1,6 +1,6 @@
 const JWT = require("jsonwebtoken");
 
-module.exports = async (req, res, next) => {
+tokenCheckHeader = async (req, res, next) => {
   const token = req.header("token");
 
   console.log("middleware auth check: ", token);
@@ -37,3 +37,5 @@ module.exports = async (req, res, next) => {
     });
   }
 };
+
+module.exports = tokenCheckHeader;
