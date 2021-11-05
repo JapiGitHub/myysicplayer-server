@@ -7,7 +7,7 @@ var fsasync = require("fs").promises;
 const ytdl = require("ytdl-core");
 const scdl = require("soundcloud-downloader").default;
 
-//title to valid filename
+//for creating valid filenames
 var sanitize = require("sanitize-filename");
 
 let folderContent;
@@ -15,6 +15,7 @@ async function loadFolder(folder) {
   folderContent = await fsasync.readdir(folder);
 }
 
+//LOGIN
 const login = (req, res) => {
   console.log("LOGIN ATTEMPT : ");
   console.log("usr : ", req.headers.username);
@@ -50,6 +51,7 @@ const login = (req, res) => {
   }
 };
 
+//kaikki biisit
 const getList = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -63,6 +65,7 @@ const getList = async (req, res) => {
   res.send(folderContent);
 };
 
+//lataa yksittäinen biisi
 const getSong = (req, res) => {
   //tulee streamina. kun kattoo devtoolsin Networkista ni pitkät biisit ainakin lataa paloissa.
   //ja nyt lataa vain yhden biisin kerrallaan eikä kaikkia valmiiksi lol
@@ -87,7 +90,9 @@ const urlDownload = async (req, res) => {
     console.log("1 : ", validTitle);
     ytdl(req.body.url, {
       filter: "audioonly",
-    }).pipe(fs.createWriteStream(`${__dirname}/bigplaylist/${validTitle}.mp3`));
+    }).pipe(
+      fs.createWriteStream(`${__dirname}/../bigplaylist/${validTitle}.mp3`)
+    );
 
     console.log("downloaded mp3 : ", ytInfo.videoDetails.title);
     res.status(200).send(`${sanitize(ytInfo.videoDetails.title)}.mp3`);
@@ -114,7 +119,7 @@ const urlDownload = async (req, res) => {
         .then((stream) => {
           stream.pipe(
             fs.createWriteStream(
-              `${__dirname}/bigplaylist/${sanitize(info.title)}.mp3`
+              `${__dirname}/../bigplaylist/${sanitize(info.title)}.mp3`
             )
           );
         })

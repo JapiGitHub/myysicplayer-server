@@ -1,9 +1,6 @@
 const tokenCheckHeader = require("../middleware/tokenCheckHeader");
 const tokenCheckUrlQuery = require("../middleware/tokenCheckUrlQuery");
 
-//youtube / soundcloud downloader
-const ytdl = require("ytdl-core");
-const scdl = require("soundcloud-downloader").default;
 //title to valid filename
 var sanitize = require("sanitize-filename");
 
@@ -30,10 +27,8 @@ router.get("/getlist", tokenCheckHeader, apiController.getList);
 //single song
 router.get("/bigplaylist/:songfile", tokenCheckUrlQuery, apiController.getSong);
 
-//
-//NÄIHIN MYÖS CHECKHEADERIT middlewareen!
 //YOUTUBE / SOUNDCLOUD DOWNLOAD
-router.post("/ytdl/", apiController.urlDownload);
+router.post("/ytdl/", tokenCheckHeader, apiController.urlDownload);
 
 //upload to server from disk
 router.post("/upload/", upload.single("file"), async (req, res, next) => {
@@ -44,7 +39,7 @@ router.post("/upload/", upload.single("file"), async (req, res, next) => {
 
   console.log("1::DETECTED FILE ::", fileExt);
 
-  //eli jos joku koittaa lähettää vaarallista tiedostoa joka on vaan muutettu .mp3:ksi, niin ei pääse läpi.
+  //jos joku koittaa lähettää vaarallista tiedostoa joka on vaan muutettu fake.mp3:ksi, niin ei pääse läpi.
   if (fileExt === ".webm" || fileExt === ".mp3" || fileExt === ".m4a") {
     console.log("2::DETECTED FILE ::", fileExt);
     console.log("succesful upload from front/rect : ", file.originalName);
